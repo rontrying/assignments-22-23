@@ -9,7 +9,62 @@ public class NotaGenerator {
      * Method main, program utama kalian berjalan disini.
      */
     public static void main(String[] args) {
-        // TODO: Implement interface menu utama
+        // Implement interface menu utama
+        int perintah = -1;
+        String namaDepan, nomorHandphone;
+
+        while (perintah != 0){
+            printMenu();
+            System.out.print("Pilihan : ");
+            perintah = validatePilihan();
+            if (perintah == -1){
+                System.out.println("Perintah tidak diketahui, silakan periksa kembali.");
+            }
+            System.out.println("================================");
+            if (perintah == 1){
+                System.out.println("Masukkan nama Anda: ");
+                namaDepan = input.nextLine();
+                System.out.println("Masukkan nomor handphone Anda: ");
+
+                nomorHandphone = input.nextLine();
+                nomorHandphone = validateNoHp(nomorHandphone);
+
+                while (nomorHandphone.equals("-1")){
+                    System.out.println("Nomor hp hanya menerima digit");
+                    nomorHandphone = input.nextLine();
+                    nomorHandphone = validateNoHp(nomorHandphone);
+                }
+
+                System.out.println("ID Anda : "+generateId(namaDepan, nomorHandphone));
+            }
+
+            if (perintah == 0){
+                System.out.println("Terima kasih telah menggunakan NotaGenerator!");
+            }
+        }
+    }
+
+    private static int validatePilihan(){
+        int perintah;
+        Scanner sc = new Scanner(System.in);
+        try{
+            perintah = sc.nextInt();
+            return perintah;
+        } catch (Exception e){
+            return -1;
+        }
+    }
+
+    private static String validateNoHp(String nomorHp){
+        if (nomorHp.equals("")){
+            return "-1";
+        }
+        for (int i =0; i < nomorHp.length(); i++){
+            if (!Character.isDigit(nomorHp.charAt(i))) {
+                return "-1";
+            }
+        }
+        return nomorHp;
     }
 
     /**
@@ -41,10 +96,42 @@ public class NotaGenerator {
      * @return String ID anggota dengan format [NAMADEPAN]-[nomorHP]-[2digitChecksum]
      */
     public static String generateId(String nama, String nomorHP){
-        // TODO: Implement generate ID sesuai soal.
-        return null;
+        //Implement generate ID sesuai soal.
+        nama = nama.split(" ")[0].toUpperCase();
+        String digitChecksum = checksum(nama + "-" + nomorHP, 0);
+        String id = nama + "-" + nomorHP + "-"+ digitChecksum;
+        return id;
     }
 
+    private static String checksum(String kalimat, int total){
+        // base case
+        // huruf uppercase dari 65 - 90
+        // angka dari 48 - 57
+        int indexHuruf = kalimat.charAt(0);
+        if (kalimat.length() == 1){
+            if ( (indexHuruf >= 65 && indexHuruf <= 90)){
+                total += (indexHuruf-(int)'A'+1);
+            } else if ((indexHuruf >= 48 && indexHuruf <= 57)){
+                total += (indexHuruf-(int)'0');
+            } else {
+                total+= 7;
+            }
+            String hasil = String.format("%02d",total);
+            
+            hasil = hasil.substring(hasil.length()-2,hasil.length());
+            return hasil;
+        }
+
+        if ( (indexHuruf >= 65 && indexHuruf <= 90)){
+            total += (indexHuruf-(int)'A'+1);
+        } else if ((indexHuruf >= 48 && indexHuruf <= 57)){
+            total += (indexHuruf-(int)'0');
+        } else {
+            total+= 7;
+        }
+        // proses rekursif
+        return checksum(kalimat.substring(1, kalimat.length()),total);
+    }
     /**
      *
      * Method untuk membuat Nota.
