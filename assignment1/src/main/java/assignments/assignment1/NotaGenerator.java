@@ -1,6 +1,7 @@
 package assignments.assignment1;
-
-import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.time.*;
+import java.util.*;
 
 public class NotaGenerator {
     private static final Scanner input = new Scanner(System.in);
@@ -36,6 +37,53 @@ public class NotaGenerator {
                 }
 
                 System.out.println("ID Anda : "+generateId(namaDepan, nomorHandphone));
+            } else if (perintah == 2){
+                System.out.println("Masukkan nama Anda: ");
+                namaDepan = input.nextLine();
+                System.out.println("Masukkan nomor handphone Anda: ");
+
+                nomorHandphone = input.nextLine();
+                nomorHandphone = validateNoHp(nomorHandphone);
+
+                while (nomorHandphone.equals("-1")){
+                    System.out.println("Nomor hp hanya menerima digit");
+                    nomorHandphone = input.nextLine();
+                    nomorHandphone = validateNoHp(nomorHandphone);
+                }
+
+                System.out.println("Masukkan tanggal terima: ");
+                String tanggalTerima = input.nextLine();
+                System.out.println("[ketik ? untuk mencari tahu jenis paket]");
+                System.out.println("Masukkan paket laundry:");
+                String paket = input.nextLine();
+                String istrue = validatePaket(paket);
+                
+                while (istrue.equals("-1") || istrue.equals("1")){
+                    if (istrue.equals("-1")){
+                        System.out.printf("Paket %s tidak diketahui\n",paket);
+                        System.out.println("[ketik ? untuk mencari tahu jenis paket]");
+                    } else if (istrue.equals("1")){
+                        showPaket();
+                    }
+                    System.out.println("Masukkan paket laundry:");
+                    paket = input.nextLine();
+                    istrue = validatePaket(paket);
+                }
+
+                System.out.println("Masukkan berat cucian Anda [Kg]:");
+                int berat = validateBerat();
+                while (berat == -1){
+                    System.out.println("Harap masukkan berat cucian Anda dalam bentuk bilangan positif.");
+                    berat = validateBerat();
+                }
+
+                if (berat < 2){
+                    System.out.println("Cucian kurang dari 2 kg, maka cucian akan dianggap sebagai 2 kg");
+                    berat++;
+                }
+
+                System.out.println("Nota Laundry");
+                System.out.println(generateNota(generateId(namaDepan, nomorHandphone), paket, berat, tanggalTerima));
             }
 
             if (perintah == 0){
@@ -44,9 +92,29 @@ public class NotaGenerator {
         }
     }
 
+    private static int validateBerat(){
+        int berat;
+        final Scanner sc = new Scanner(System.in);
+        try{
+            berat = sc.nextInt();
+            return berat;
+        } catch (Exception e){
+            return -1;
+        }
+    }
+
+    private static String validatePaket(String paket){
+        if (paket.equalsIgnoreCase("express") || paket.equalsIgnoreCase("fast") || paket.equalsIgnoreCase("reguler")){
+            return paket;
+        } else if (paket.equals("?")){
+            return "1";
+        }
+        return "-1";
+    }
+
     private static int validatePilihan(){
         int perintah;
-        Scanner sc = new Scanner(System.in);
+        final Scanner sc = new Scanner(System.in);
         try{
             perintah = sc.nextInt();
             return perintah;
@@ -116,8 +184,10 @@ public class NotaGenerator {
             } else {
                 total+= 7;
             }
-            String hasil = String.format("%02d",total);
-            
+            String hasil = String.format("%s",total);
+            if (hasil.length() <= 1){
+                hasil+="0";
+            }
             hasil = hasil.substring(hasil.length()-2,hasil.length());
             return hasil;
         }
@@ -132,6 +202,15 @@ public class NotaGenerator {
         // proses rekursif
         return checksum(kalimat.substring(1, kalimat.length()),total);
     }
+
+    private static String countDays(String date1, int hari) throws Exception{
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar c = Calendar.getInstance();
+        c.setTime(sdf.parse(date1));
+        c.add(Calendar.DATE, hari);  // number of days to add
+        return sdf.format(c.getTime());
+    }
+
     /**
      *
      * Method untuk membuat Nota.
@@ -147,7 +226,33 @@ public class NotaGenerator {
      */
 
     public static String generateNota(String id, String paket, int berat, String tanggalTerima){
-        // TODO: Implement generate nota sesuai soal.
-        return null;
+        String output;
+        //Implement generate nota sesuai soal.
+        long harga, hargaPerKilo;
+        int waktu;
+        harga = 0;
+        if (paket.equalsIgnoreCase("express")){
+            hargaPerKilo = 12000;
+            harga+=berat*hargaPerKilo;
+            waktu = 1;
+        } else if (paket.equalsIgnoreCase("fast")){
+            hargaPerKilo = 10000;
+            harga+=berat*hargaPerKilo;
+            waktu = 2;
+        } else {
+            hargaPerKilo = 7000;
+            harga+=berat*hargaPerKilo;
+            waktu = 3;
+        }
+
+        output = "ID    : "+ id + "\n" + "Paket : "+ paket+"\n"+ "Harga :\n"+Integer.toString(berat);
+        output+=" kg x "+Long.toString(hargaPerKilo)+" = "+Long.toString(harga);
+        output+="\nTanggal Terima  : "+tanggalTerima+"\nTanggal Selesai : ";
+        try{
+            output+=countDays(tanggalTerima, waktu);
+        } catch (Exception e){
+            output+="date error";
+        }
+        return output;
     }
 }
