@@ -11,9 +11,10 @@ public class NotaGenerator {
      */
     public static void main(String[] args) {
         // Implement interface menu utama
-        int perintah = -1;
+        int perintah = -2;
         String namaDepan, nomorHandphone;
 
+        // while loop menjalankan perintah sampai input user bernilai 0 akan berhenti
         while (perintah != 0){
             printMenu();
             System.out.print("Pilihan : ");
@@ -22,6 +23,8 @@ public class NotaGenerator {
                 System.out.println("Perintah tidak diketahui, silakan periksa kembali.");
             }
             System.out.println("================================");
+
+            // menu generate id dengan validasi no hp
             if (perintah == 1){
                 System.out.println("Masukkan nama Anda: ");
                 namaDepan = input.nextLine();
@@ -30,6 +33,7 @@ public class NotaGenerator {
                 nomorHandphone = input.nextLine();
                 nomorHandphone = validateNoHp(nomorHandphone);
 
+                // while loop meminta input sampai nomorhp sesuai
                 while (nomorHandphone.equals("-1")){
                     System.out.println("Nomor hp hanya menerima digit");
                     nomorHandphone = input.nextLine();
@@ -37,7 +41,8 @@ public class NotaGenerator {
                 }
 
                 System.out.println("ID Anda : "+generateId(namaDepan, nomorHandphone));
-            } else if (perintah == 2){
+            } // menu perintah 2 generate nota dengan validasi no hp, validasi paket, validasi berat, tanggal sudah dijamin inputnya
+            else if (perintah == 2){
                 System.out.println("Masukkan nama Anda: ");
                 namaDepan = input.nextLine();
                 System.out.println("Masukkan nomor handphone Anda: ");
@@ -45,6 +50,7 @@ public class NotaGenerator {
                 nomorHandphone = input.nextLine();
                 nomorHandphone = validateNoHp(nomorHandphone);
 
+                // while loop meminta nomor hp sampai sesuai 
                 while (nomorHandphone.equals("-1")){
                     System.out.println("Nomor hp hanya menerima digit");
                     nomorHandphone = input.nextLine();
@@ -58,6 +64,7 @@ public class NotaGenerator {
                 String paket = input.nextLine();
                 String istrue = validatePaket(paket);
                 
+                // while loop meminta paket sampai sesuai
                 while (istrue.equals("-1") || istrue.equals("1")){
                     if (istrue.equals("-1")){
                         System.out.printf("Paket %s tidak diketahui\n",paket);
@@ -72,6 +79,8 @@ public class NotaGenerator {
 
                 System.out.println("Masukkan berat cucian Anda [Kg]:");
                 int berat = validateBerat();
+
+                // while loop meminta berat sampai sesuai
                 while (berat == -1){
                     System.out.println("Harap masukkan berat cucian Anda dalam bentuk bilangan positif.");
                     berat = validateBerat();
@@ -85,24 +94,38 @@ public class NotaGenerator {
                 System.out.println("Nota Laundry");
                 System.out.println(generateNota(generateId(namaDepan, nomorHandphone), paket, berat, tanggalTerima));
             }
-
+            // exit program
             if (perintah == 0){
                 System.out.println("Terima kasih telah menggunakan NotaGenerator!");
             }
         }
     }
 
+    /**
+     * Method untuk mengvalidasi berat menggunakan try catch.
+     * mengembalikan berat jika sesuai ketentuan
+     * mengembalikan -1 jika bukan angka
+     * mengembalikan -1 jika berat bukan bilangan bulat positif
+     */
     private static int validateBerat(){
         int berat;
         final Scanner sc = new Scanner(System.in);
         try{
             berat = sc.nextInt();
+            if (berat <= 0){
+                return -1;
+            }
             return berat;
         } catch (Exception e){
             return -1;
         }
     }
 
+    /**
+     * Method untuk mengvalidasi paket.
+     * mengembalikan 1 jika user meminta data paket
+     * mengembalikan -1 jika paket tidak ada
+     */
     private static String validatePaket(String paket){
         if (paket.equalsIgnoreCase("express") || paket.equalsIgnoreCase("fast") || paket.equalsIgnoreCase("reguler")){
             return paket;
@@ -112,17 +135,32 @@ public class NotaGenerator {
         return "-1";
     }
 
+    /**
+     * Method untuk mengvalidasi pilihan.
+     * mengembalikan -1 jika tidak sesuai format pilihan 
+     * mengembalikan -1 jika bukan diantara 0 dan 2
+     * mengembalikan perintah jika format sesuai
+     */
     private static int validatePilihan(){
         int perintah;
         final Scanner sc = new Scanner(System.in);
         try{
             perintah = sc.nextInt();
+            if (perintah < 0 || perintah > 2){
+                return -1;
+            }
             return perintah;
         } catch (Exception e){
             return -1;
         }
     }
 
+    /**
+     * Method untuk mengvalidasi nomor handphone.
+     * mengembalikan -1 jika string kosong 
+     * mengembalikan -1 jika bukan digit
+     * mengembalikan nomor handphone jika format sesuai
+     */
     private static String validateNoHp(String nomorHp){
         if (nomorHp.equals("")){
             return "-1";
@@ -171,6 +209,10 @@ public class NotaGenerator {
         return id;
     }
 
+    /**
+     * Method untuk melakukan checksum dan mengembalikan 2 angka digit terakhir sebagai id.
+     * menggunakan proses rekursif mengurangi huruf 1 demi demi 1 hinga base case.
+     */
     private static String checksum(String kalimat, int total){
         // base case
         // huruf uppercase dari 65 - 90
@@ -203,6 +245,10 @@ public class NotaGenerator {
         return checksum(kalimat.substring(1, kalimat.length()),total);
     }
 
+    /**
+     * Method untuk melakukan perhitungan hari
+     * menggunakan simple date format dan java calender
+     */
     private static String countDays(String date1, int hari) throws Exception{
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar c = Calendar.getInstance();
