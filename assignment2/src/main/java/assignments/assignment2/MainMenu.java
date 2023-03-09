@@ -53,7 +53,7 @@ public class MainMenu {
 
         Member member = new Member(namaDepan, nomorHandphone);
 
-        if (validateid(member.getId())){
+        if (validateIdMember(member.getId())){
             memberList.add(member);
             System.out.println("Berhasil membuat member dengan ID "+member.getId());
         } else {
@@ -61,7 +61,7 @@ public class MainMenu {
         }
     }
 
-    private static boolean validateid(String id){
+    private static boolean validateIdMember(String id){
         for (int i =0; i < memberList.size(); i++){
             if (memberList.get(i).getId().equals(id)){
                 return false;
@@ -248,7 +248,7 @@ public class MainMenu {
         try{
             id = sc.nextInt();
             if (id < 0){
-                return -1;
+                return -2;
             }
             return id;
         } catch (Exception e){
