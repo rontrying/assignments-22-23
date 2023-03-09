@@ -7,6 +7,7 @@ import java.util.Scanner;
 import static assignments.assignment1.NotaGenerator.*;
 
 public class MainMenu {
+    // definisi variabel static
     private static final Scanner input = new Scanner(System.in);
     private static SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
     private static Calendar cal = Calendar.getInstance();
@@ -14,6 +15,7 @@ public class MainMenu {
     private static ArrayList<Member> memberList = new ArrayList<Member>();
 
     public static void main(String[] args) {
+        // menu utama
         boolean isRunning = true;
         while (isRunning) {
             printMenu();
@@ -34,6 +36,11 @@ public class MainMenu {
         System.out.println("Terima kasih telah menggunakan NotaGenerator!");
     }
 
+    /*
+     * fungsi handle generate user 
+     * validasi no hp
+     * validasi id member sudah ada atau belum
+     */
     private static void handleGenerateUser() {
         //handle generate user
         String namaDepan, nomorHandphone;
@@ -61,6 +68,11 @@ public class MainMenu {
         }
     }
 
+    /*
+     * fungsi untuk mengvalidasi id member 
+     * return false jika sudah ada id membernya
+     * return true jika belum ada
+     */
     private static boolean validateIdMember(String id){
         for (int i =0; i < memberList.size(); i++){
             if (memberList.get(i).getId().equals(id)){
@@ -88,6 +100,9 @@ public class MainMenu {
         return nomorHp;
     }
 
+    /*
+     * fungsi handle generate nota dengan validasi paket, berat dan id
+     */
     private static void handleGenerateNota() {
         //handle ambil cucian
         System.out.println("Masukan ID member:");
@@ -184,6 +199,9 @@ public class MainMenu {
         System.out.println("+-------------------------------+");
     }
 
+    /*
+     * memeriksa apakah setiap nota cucian sudah bisa diambil atau tidak
+     */
     private static void handleListNota() {
         //handle list semua nota pada sistem
         if (notaList.size() == 0){
@@ -213,7 +231,8 @@ public class MainMenu {
     }
 
     private static void handleAmbilCucian() {
-        //handle ambil cucian
+        //handle ambil cucian, menghilangkan nota jika cucian sudah diambil
+        // mengvalidasi id dan apakah ada atau tidak dan berhasil diambil atau tidak
         boolean istrue = false;
         System.out.println("Masukan ID nota yang akan diambil:");
         int id = validateId();
@@ -242,6 +261,10 @@ public class MainMenu {
         }
     }
 
+    /*
+     * validasi id
+     * return -2 jika lebih kecil dari 0 dan bukan angka
+     */
     private static int validateId(){
         int id;
         final Scanner sc = new Scanner(System.in);
@@ -257,7 +280,7 @@ public class MainMenu {
     }
 
     private static void handleNextDay() {
-        //handle ganti hari
+        //handle ganti hari dan mengecek laundry yang sudah bisa diambil
         System.out.println("Dek Depe tidur hari ini... zzz...");
         cal.add(Calendar.DATE, 1);
         for (int i = 0; i < notaList.size();i++){
