@@ -4,14 +4,14 @@ import assignments.assignment1.NotaGenerator;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 public class Nota {
-    //tambahkan attributes yang diperlukan untuk class ini
+    //attributes yang diperlukan untuk class ini
     private int idBon, berat, sisaHariPengerjaan;
     private static int idNota = -1;
     private String paket, tanggalMasuk;
     private Member member;
     private boolean isReady;
     public Nota(Member member, String paket, int berat, String tanggalMasuk) {
-        //buat constructor untuk class ini
+        //constructor untuk class ini
         this.member = member;
         this.paket = paket;
         this.berat = berat;
@@ -21,7 +21,7 @@ public class Nota {
         this.idBon = idNota;
     }
 
-    //tambahkan methods yang diperlukan untuk class ini
+    //methods yang diperlukan untuk class ini
     // getter
 
     public int getId(){
@@ -51,6 +51,7 @@ public class Nota {
         return this.isReady;
     }
 
+    // setter
     public void setSisaHariPengerjaan(){
         if (this.sisaHariPengerjaan > 1){
             this.sisaHariPengerjaan-=1;
@@ -113,6 +114,10 @@ public class Nota {
         return output;
     }
 
+    /**
+     * Method untuk melakukan perhitungan hari
+     * menggunakan simple date format dan java calender
+     */
     private static String countDays(String date1, int hari) throws Exception{
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar c = Calendar.getInstance();

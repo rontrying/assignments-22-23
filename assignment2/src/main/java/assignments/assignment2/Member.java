@@ -14,6 +14,7 @@ public class Member {
         this.bonusCounter=0;
     }
 
+    // getter
     public String getId(){
         return this.id;
     }
@@ -26,6 +27,7 @@ public class Member {
         return this.bonusCounter;
     }
 
+    // setter dan increament
     public void setBonusCounter(){
         this.bonusCounter+=1;
     }
@@ -33,7 +35,7 @@ public class Member {
     public void resetBonusCounter(){
         this.bonusCounter = 0;
     }
-    //tambahkan methods yang diperlukan untuk class ini
+    //methods yang diperlukan untuk class ini
     public static String generateId(String nama, String nomorHP){
         //Implement generate ID sesuai soal.
         nama = nama.split(" ")[0].toUpperCase();
