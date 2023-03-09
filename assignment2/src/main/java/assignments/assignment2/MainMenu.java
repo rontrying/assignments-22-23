@@ -221,7 +221,7 @@ public class MainMenu {
             System.out.println("ID nota berbentuk angka!");
             id = validateId();
         }
-        if(id == -1 || notaList.size() == 0){
+        if(notaList.size() == 0){
             System.out.println("tidak ditemukan");
         } else{
             for (int i = 0; i < notaList.size(); i++){
