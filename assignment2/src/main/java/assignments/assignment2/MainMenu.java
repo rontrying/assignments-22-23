@@ -14,7 +14,7 @@ public class MainMenu {
     private static ArrayList<Nota> notaList = new ArrayList<Nota>();
     private static ArrayList<Member> memberList = new ArrayList<Member>();
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args){
         // menu utama
         boolean isRunning = true;
         while (isRunning) {
@@ -250,7 +250,7 @@ public class MainMenu {
         int id = Integer.parseInt(idString);
 
         if(notaList.size() == 0){
-            System.out.printf("Nota dengan ID %s tidak ditemukan",idString);
+            System.out.printf("Nota dengan ID %s tidak ditemukan\n",idString);
         } else{
             for (int i = 0; i < notaList.size(); i++){
                 if (notaList.get(i).GetIsReady() && (notaList.get(i).getId() == id)){
