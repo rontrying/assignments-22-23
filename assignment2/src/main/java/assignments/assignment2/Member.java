@@ -1,6 +1,5 @@
 package assignments.assignment2;
 
-import assignments.assignment1.NotaGenerator;
 
 public class Member {
     //tambahkan attributes yang diperlukan untuk class ini

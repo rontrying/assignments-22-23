@@ -1,8 +1,7 @@
 package assignments.assignment2;
-
-import assignments.assignment1.NotaGenerator;
-import java.util.Calendar;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class Nota {
     //attributes yang diperlukan untuk class ini
     private int idBon, berat, sisaHariPengerjaan;

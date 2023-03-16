@@ -1,20 +1,20 @@
 package assignments.assignment2;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
 
-import static assignments.assignment1.NotaGenerator.*;
 
 public class MainMenu {
     // definisi variabel static
     private static final Scanner input = new Scanner(System.in);
-    private static SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+    private static final SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
     private static Calendar cal = Calendar.getInstance();
     private static ArrayList<Nota> notaList = new ArrayList<Nota>();
     private static ArrayList<Member> memberList = new ArrayList<Member>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
         // menu utama
         boolean isRunning = true;
         while (isRunning) {
@@ -62,7 +62,7 @@ public class MainMenu {
 
         if (validateIdMember(member.getId())){
             memberList.add(member);
-            System.out.println("Berhasil membuat member dengan ID "+member.getId());
+            System.out.println("Berhasil membuat member dengan ID "+member.getId()+"!");
         } else {
             System.out.printf("Member dengan nama %s dan nomor hp %s sudah ada!\n",namaDepan,nomorHandphone);
         }
@@ -105,6 +105,7 @@ public class MainMenu {
      */
     private static void handleGenerateNota() {
         //handle ambil cucian
+        boolean isada = false;
         System.out.println("Masukan ID member:");
         String id = input.nextLine();
         if (memberList.size() == 0){
@@ -148,11 +149,12 @@ public class MainMenu {
                 notaList.add(nota);
                 System.out.println("Berhasil menambahkan nota!");
                 System.out.println(nota.generateNota());
-                break;
-            } else{
-                System.out.printf("Member dengan ID %s tidak ditemukan!\n",id);
+                isada = true;
                 break;
             }
+        }
+        if (!isada){
+            System.out.printf("Member dengan ID %s tidak ditemukan!\n",id);
         }
         
     }
@@ -235,49 +237,39 @@ public class MainMenu {
         // mengvalidasi id dan apakah ada atau tidak dan berhasil diambil atau tidak
         boolean istrue = false;
         System.out.println("Masukan ID nota yang akan diambil:");
-        int id = validateId();
-        while (id == -2){
-            System.out.println("ID nota berbentuk angka!");
-            id = validateId();
+        String idString = input.nextLine();
+        idString = validateNoHp(idString);
+
+        // while loop meminta input sampai sesuai
+        while (idString.equals("-1")){
+            System.out.println("Nota id harus berupa angka!");
+            idString = input.nextLine();
+            idString = validateNoHp(idString);
         }
+
+        int id = Integer.parseInt(idString);
+
         if(notaList.size() == 0){
-            System.out.println("tidak ditemukan");
+            System.out.printf("Nota dengan ID %s tidak ditemukan",idString);
         } else{
             for (int i = 0; i < notaList.size(); i++){
                 if (notaList.get(i).GetIsReady() && (notaList.get(i).getId() == id)){
-                    System.out.printf("Nota dengan ID %d berhasil diambil!\n",id);
+                    System.out.printf("Nota dengan ID %s berhasil diambil!\n",idString);
                     notaList.remove(i);
                     istrue = true;
                     break;
                 } else if (!notaList.get(i).GetIsReady() && (notaList.get(i).getId() == id)){
-                    System.out.printf("Nota dengan ID %d gagal diambil!\n",id);
+                    System.out.printf("Nota dengan ID %s gagal diambil!\n",idString);
                     istrue = true;
                     break;
                 }
             }
             if (!istrue){
-                System.out.printf("Nota dengan ID %d tidak ditemukan!\n",id);
+                System.out.printf("Nota dengan ID %s tidak ditemukan!\n",idString);
             }
         }
     }
 
-    /*
-     * validasi id
-     * return -2 jika lebih kecil dari 0 dan bukan angka
-     */
-    private static int validateId(){
-        int id;
-        final Scanner sc = new Scanner(System.in);
-        try{
-            id = sc.nextInt();
-            if (id < 0){
-                return -2;
-            }
-            return id;
-        } catch (Exception e){
-            return -2;
-        }
-    }
 
     private static void handleNextDay() {
         //handle ganti hari dan mengecek laundry yang sudah bisa diambil
