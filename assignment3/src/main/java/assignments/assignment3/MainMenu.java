@@ -57,6 +57,7 @@ public class MainMenu {
     private void toNextDay() {
         System.out.println("Kamu tidur hari ini... zzz...");
         NotaManager.toNextDay();
+        System.out.println();
     }
 
     /**
@@ -73,9 +74,11 @@ public class MainMenu {
         Member registeredMember = loginManager.register(nama, noHp, password);
         if(registeredMember == null){
             System.out.printf("User dengan nama %s dan nomor hp %s sudah ada!\n", nama, noHp);
+            System.out.println();
             return;
         }
         System.out.printf("Berhasil membuat user dengan ID %s!\n", registeredMember.getId());
+        System.out.println();
     }
 
     /**
@@ -89,6 +92,7 @@ public class MainMenu {
         SystemCLI systemCLI = loginManager.getSystem(inputId);
         if(systemCLI == null){
             System.out.println("ID atau password invalid.");
+            System.out.println();
             return;
         }
         systemCLI.login(in, inputId, inputPassword);
