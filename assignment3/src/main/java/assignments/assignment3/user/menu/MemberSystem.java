@@ -52,7 +52,7 @@ public class MemberSystem extends SystemCLI {
                 berat++;
                 System.out.println("Cucian kurang dari 2 kg, maka cucian akan dianggap sebagai 2 kg");
             }
-
+            // buat nota
             Nota nota = new Nota(loginMember, berat, paket, fmt.format(cal.getTime()));
 
             System.out.print("Apakah kamu ingin cucianmu disetrika oleh staff professional kami?\n" +
@@ -63,7 +63,7 @@ public class MemberSystem extends SystemCLI {
 
             if (!perintahSetrika.equals("x")){
                 SetrikaService setrikaService = new SetrikaService();
-                nota.addService(setrikaService);
+                nota.addService(setrikaService); //isi service setrika
             }
             System.out.print("Mau diantar oleh kurir kami? Dijamin aman dan cepat sampai tujuan!\n" +
                     "Cuma 2000 / 4kg, kemudian 500 / kg\n" +
@@ -73,14 +73,14 @@ public class MemberSystem extends SystemCLI {
 
             if (!perintahAntar.equals("x")){
                 AntarService antarService = new AntarService();
-                nota.addService(antarService);
+                nota.addService(antarService); // service antar
             }
             loginMember.addNota(nota);
             NotaManager.addNota(nota);
 
             System.out.println("Nota berhasil dibuat!");
 
-        } else if (choice == 2){
+        } else if (choice == 2){ //detail nota untuk pelanggan
             Nota[] arrayNota = loginMember.getNotaList();
             for (Nota nota : arrayNota){
                 System.out.println(nota);

@@ -21,7 +21,7 @@ public class Nota {
     private int counterCalculateHarga;
 
     public Nota(Member member, int berat, String paket, String tanggal) {
-        //TODO
+        //construct harga awal dan isi service cuci
         this.member = member;
         this.paket = paket;
         this.berat = berat;
@@ -48,7 +48,7 @@ public class Nota {
     }
 
     public String kerjakan(){
-        // perintah menampilkan kondisi nota sedang apa
+        // perintah menampilkan pekerjaan yang dilakukan employee
         String output = "";
         if (services == null || services[services.length-1].isDone()){
             return "Nota " + this.id + " : Sudah selesai.";
@@ -160,6 +160,7 @@ public class Nota {
     
     
     private Long hitungBiayaService(String perintah) {
+        // untuk mengeluarkan output harga layanan
         if (services != null) {
             for (LaundryService laundryService : services) {
                 if (perintah.equals("Antar")) {

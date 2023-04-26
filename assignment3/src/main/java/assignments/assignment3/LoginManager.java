@@ -83,6 +83,7 @@ public class LoginManager {
         return checksum(kalimat.substring(1),total);
     }
 
+    // untuk mengvalidasi nomor hp return -1 jika string kosong atau bukan digit
     private static String validateNoHp(String nomorHp){
         if (nomorHp.equals("")){
             return "-1";
