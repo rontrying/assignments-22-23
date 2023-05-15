@@ -3,6 +3,7 @@ package assignments.assignment4.gui.member;
 import assignments.assignment3.user.Member;
 import assignments.assignment3.user.menu.SystemCLI;
 import assignments.assignment4.MainFrame;
+import assignments.assignment4.gui.member.member.MemberSystemGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +20,7 @@ public abstract class AbstractMemberGUI extends JPanel implements Loginable{
         super(new BorderLayout());
         this.systemCLI = systemCLI;
         // Set up welcome label
-        welcomeLabel = new JLabel("", SwingConstants.CENTER);
+        welcomeLabel = new JLabel("Welcome!", SwingConstants.CENTER);
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
         add(welcomeLabel, BorderLayout.NORTH);
 
@@ -88,7 +89,13 @@ public abstract class AbstractMemberGUI extends JPanel implements Loginable{
      * @return true jika ID dan password sesuai dengan instance member, false jika tidak.
      * */
     public boolean login(String id, String password) {
-        // TODO
+        Member authMember = systemCLI.authUser(id, password);
+        if (authMember != null) {
+            this.loggedInMember = authMember;
+            welcomeLabel.setText("Welcome! "+authMember.getNama());
+            loggedInAsLabel.setText("Logged in as "+authMember.getId());
+            return true;
+        }
         return false;
     }
 

@@ -53,4 +53,17 @@ public class EmployeeSystem extends SystemCLI {
         System.out.println("2. Display List Nota");
         System.out.println("3. Logout");
     }
+
+    public void addEmployee(Employee[] employees){
+        // Menentukan ukuran array baru dengan tambahan karyawan
+        Member[] newMemberList = new Member[memberList.length + employees.length];
+
+        // Menyalin data dari memberList ke newMemberList
+        System.arraycopy(memberList, 0, newMemberList, 0, memberList.length);
+
+        System.arraycopy(employees, 0, newMemberList, memberList.length, employees.length);
+
+        // Mengganti referensi memberList dengan newMemberList
+        memberList = newMemberList;
+    }
 }

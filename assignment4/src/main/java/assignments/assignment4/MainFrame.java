@@ -32,12 +32,11 @@ public class MainFrame extends JFrame{
 
     private MainFrame(){
         super("CuciCuciSystem");
-//        TODO: uncomment code dibawah ini setelah kamu implmentasikan addEmployee pada EmployeeSystem.
 //        // for context dari 2 employee baru ini : https://ristek.link/karyawan-baru-cucicuci
-//        employeeSystem.addEmployee(new Employee[]{
-//                new Employee("delta Epsilon Huha Huha", "ImplicitDiff"),
-//                new Employee("Regret", "FansBeratKanaArima")
-//        });
+        employeeSystem.addEmployee(new Employee[]{
+                new Employee("delta Epsilon Huha Huha", "ImplicitDiff"),
+                new Employee("Regret", "FansBeratKanaArima")
+        });
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 432);
         setVisible(true);
@@ -84,6 +83,7 @@ public class MainFrame extends JFrame{
      * */
     public void navigateTo(String page){
         // TODO
+        cards.show(mainPanel, page);
     }
 
     /**
@@ -99,7 +99,10 @@ public class MainFrame extends JFrame{
     public boolean login(String id, String password){
         for (Loginable panel:
                 loginablePanel) {
-            // TODO
+            if (panel.login(id, password)){
+                navigateTo(panel.getPageName());
+                return true;
+            }
         }
         return false;
     }
@@ -121,6 +124,7 @@ public class MainFrame extends JFrame{
         // Jika ingin tau lebih lanjut mengapa menggunakan SwingUtilities.invokeLater
         // silakan akses https://stackoverflow.com/questions/6567870/what-does-swingutilities-invokelater-do
         // Tapi in general kalian tidak usah terlalu overthinking line ini selain fungsi utamanya adalah menampilkan GUI
+
         SwingUtilities.invokeLater(MainFrame::getInstance);
     }
 }

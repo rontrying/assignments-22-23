@@ -36,6 +36,8 @@ public class MemberSystemGUI extends AbstractMemberGUI {
     protected JButton[] createButtons() {
         // TODO
         return new JButton[]{
+                new JButton("Saya ingin laundry"),
+                new JButton("Lihat detail nota saya")
         };
     }
 
@@ -58,7 +60,22 @@ public class MemberSystemGUI extends AbstractMemberGUI {
      * Akan dipanggil jika pengguna menekan button pertama pada createButtons
      * */
     private void showDetailNota() {
-        // TODO
+        String text = "";
+        Nota[] arrayNota = loggedInMember.getNotaList();
+        for (Nota nota : arrayNota){
+            text+=nota.toString()+"\n\n\n";
+        }
+        JTextArea textArea = new JTextArea(20, 45);
+        textArea.setLineWrap(true);
+        textArea.setEditable(false);
+        textArea.setText(text);
+
+        // Membungkus JTextArea dengan JScrollPane
+        JScrollPane scrollPane = new JScrollPane(textArea);
+
+        // Membuat JOptionPane dengan JScrollPane sebagai isi pesan
+        JOptionPane.showMessageDialog(this, scrollPane, "Informasi", JOptionPane.INFORMATION_MESSAGE);
+
     }
 
     /**
@@ -66,7 +83,7 @@ public class MemberSystemGUI extends AbstractMemberGUI {
      * Akan dipanggil jika pengguna menekan button kedua pada createButtons
      * */
     private void createNota() {
-        // TODO
+        MainFrame.getInstance().navigateTo(CreateNotaGUI.KEY);
     }
 
 }

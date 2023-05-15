@@ -9,6 +9,8 @@ import assignments.assignment4.gui.member.AbstractMemberGUI;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 
+import static assignments.assignment3.nota.NotaManager.notaList;
+
 public class EmployeeSystemGUI extends AbstractMemberGUI {
     public static final String KEY = "EMPLOYEE";
 
@@ -30,8 +32,9 @@ public class EmployeeSystemGUI extends AbstractMemberGUI {
      * */
     @Override
     protected JButton[] createButtons() {
-        // TODO
         return new JButton[]{
+                new JButton("It's nyuci time"),
+                new JButton("Display List Nota")
         };
     }
 
@@ -54,7 +57,14 @@ public class EmployeeSystemGUI extends AbstractMemberGUI {
      * Akan dipanggil jika pengguna menekan button pertama pada createButtons
      * */
     private void displayNota() {
-        // TODO
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        for (Nota nota : notaList){
+            JLabel label = new JLabel(nota.getNotaStatus());
+            panel.add(label);
+        }
+
+        JOptionPane.showMessageDialog(this, panel, "Informasi", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -62,6 +72,13 @@ public class EmployeeSystemGUI extends AbstractMemberGUI {
      * Akan dipanggil jika pengguna menekan button kedua pada createButtons
      * */
     private void cuci() {
-        // TODO
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        for (Nota nota : notaList){
+            JLabel label = new JLabel(nota.kerjakan());
+            panel.add(label);
+        }
+
+        JOptionPane.showMessageDialog(this, panel, "Informasi", JOptionPane.INFORMATION_MESSAGE);
     }
 }

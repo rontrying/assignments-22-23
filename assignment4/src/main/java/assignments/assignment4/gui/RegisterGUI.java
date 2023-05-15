@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class RegisterGUI extends JPanel {
+public class RegisterGUI extends JPanel implements ActionListener {
     public static final String KEY = "REGISTER";
     private JPanel mainPanel;
     private JLabel nameLabel;
@@ -28,7 +28,7 @@ public class RegisterGUI extends JPanel {
 
         // Set up main panel, Feel free to make any changes
         mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
         initGUI();
 
@@ -41,7 +41,46 @@ public class RegisterGUI extends JPanel {
      * Be creative and have fun!
      * */
     private void initGUI() {
-        // TODO
+        GridBagConstraints gridManager = new GridBagConstraints();
+        gridManager.fill = GridBagConstraints.HORIZONTAL;
+        gridManager.weightx=1.0;
+        gridManager.weighty=1.0;
+        gridManager.gridx = 0;
+
+        nameLabel = new JLabel("Masukan ID Anda:");
+        gridManager.gridy = 0;
+        mainPanel.add(nameLabel, gridManager);
+
+        nameTextField = new JTextField();
+        gridManager.gridy = 1;
+        mainPanel.add(nameTextField, gridManager);
+
+        phoneLabel = new JLabel("Masukan nomor handphone Anda:");
+        gridManager.gridy = 2;
+        mainPanel.add(phoneLabel, gridManager);
+
+        phoneTextField = new JTextField();
+        gridManager.gridy = 3;
+        mainPanel.add(phoneTextField, gridManager);
+
+        passwordLabel = new JLabel("Masukan password Anda:");
+        gridManager.gridy = 4;
+        mainPanel.add(passwordLabel, gridManager);
+
+        passwordField = new JPasswordField();
+        gridManager.gridy = 5;
+        mainPanel.add(passwordField, gridManager);
+
+        gridManager.fill = GridBagConstraints.RELATIVE;
+        registerButton = new JButton("Register");
+        gridManager.gridy = 6;
+        registerButton.addActionListener(this);
+        mainPanel.add(registerButton, gridManager);
+
+        backButton = new JButton("Kembali");
+        gridManager.gridy = 7;
+        backButton.addActionListener(this);
+        mainPanel.add(backButton, gridManager);
     }
 
     /**
@@ -49,6 +88,9 @@ public class RegisterGUI extends JPanel {
      * Akan dipanggil jika pengguna menekan "backButton"
      * */
     private void handleBack() {
+        nameTextField.setText("");phoneTextField.setText("");passwordField.setText("");
+        MainFrame mainFrame = MainFrame.getInstance();
+        mainFrame.navigateTo(HomeGUI.KEY);
     }
 
     /**
@@ -56,6 +98,42 @@ public class RegisterGUI extends JPanel {
     * Akan dipanggil jika pengguna menekan "registerButton"
     * */
     private void handleRegister() {
-        // TODO
+        String nama = nameTextField.getText();
+        String noHp = phoneTextField.getText();
+        String password = passwordField.getText();
+        if (validateNoHp(noHp).equals("-1")){
+            JOptionPane.showMessageDialog(mainPanel, "Nomor handphone harus berisi angka!", "Invalid Phone Number", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Member registeredMember = loginManager.register(nama, noHp, password);
+        if(registeredMember == null){
+            JOptionPane.showMessageDialog(mainPanel, "User dengan nama "+nama+" dan nomor hp "+noHp+" sudah ada!", "Registration Failed", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(mainPanel, "Berhasil membuat user dengan ID "+registeredMember.getId(), "Registration Successful", JOptionPane.INFORMATION_MESSAGE);
+        nameTextField.setText("");phoneTextField.setText("");passwordField.setText("");
+        handleBack();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == registerButton){
+            handleRegister();
+        } else if (e.getSource() == backButton){
+            handleBack();
+        }
+    }
+
+    private static String validateNoHp(String nomorHp){
+        if (nomorHp.equals("")){
+            return "-1";
+        }
+        for (int i =0; i < nomorHp.length(); i++){
+            if (!Character.isDigit(nomorHp.charAt(i))) {
+                return "-1";
+            }
+        }
+        return nomorHp;
     }
 }

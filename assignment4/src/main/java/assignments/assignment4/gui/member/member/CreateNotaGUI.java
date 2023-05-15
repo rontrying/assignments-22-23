@@ -13,8 +13,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Scanner;
 
-public class CreateNotaGUI extends JPanel {
+import static assignments.assignment3.nota.NotaManager.cal;
+import static assignments.assignment3.nota.NotaManager.fmt;
+
+public class CreateNotaGUI extends JPanel implements ActionListener {
     public static final String KEY = "CREATE_NOTA";
     private JLabel paketLabel;
     private JComboBox<String> paketComboBox;
@@ -30,11 +34,13 @@ public class CreateNotaGUI extends JPanel {
     private final MemberSystemGUI memberSystemGUI;
 
     public CreateNotaGUI(MemberSystemGUI memberSystemGUI) {
+        super(new GridBagLayout());
         this.memberSystemGUI = memberSystemGUI;
         this.fmt = NotaManager.fmt;
         this.cal = NotaManager.cal;
 
         // Set up main panel, Feel free to make any changes
+        this.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
         initGUI();
     }
 
@@ -45,6 +51,57 @@ public class CreateNotaGUI extends JPanel {
      * */
     private void initGUI() {
         // TODO
+        GridBagConstraints gridManager = new GridBagConstraints();
+        gridManager.weightx=1.0;
+        gridManager.weighty=1.0;
+        gridManager.fill = GridBagConstraints.HORIZONTAL;
+
+        paketLabel = new JLabel("Paket Laundry:");
+        gridManager.gridy = 0;
+        add(paketLabel, gridManager);
+
+        String[] comboBoxItems = {"Fast", "Reguler", "Express"};
+        paketComboBox = new JComboBox<>(comboBoxItems);
+        gridManager.anchor = GridBagConstraints.EAST;
+        gridManager.insets = new Insets(0,10, 0, 10);
+        add(paketComboBox, gridManager);
+
+        showPaketButton = new JButton("Show Paket");
+        gridManager.anchor = GridBagConstraints.EAST;
+        showPaketButton.addActionListener(this);
+        add(showPaketButton, gridManager);
+
+        beratLabel = new JLabel("Berat Cucian(Kg):");
+        gridManager.anchor = GridBagConstraints.WEST;
+        gridManager.insets = new Insets(0,0, 0, 0);
+        gridManager.gridy = 1;
+        add(beratLabel, gridManager);
+
+        beratTextField = new JTextField();
+        gridManager.anchor = GridBagConstraints.EAST;
+        gridManager.insets = new Insets(0,10, 0, 10);
+        add(beratTextField, gridManager);
+
+        setrikaCheckBox = new JCheckBox("Tambah Setrika Service (1000/kg)");
+        gridManager.gridy = 2;
+        gridManager.anchor = GridBagConstraints.WEST;
+        gridManager.insets = new Insets(0,0, 0, 0);
+        add(setrikaCheckBox, gridManager);
+
+        antarCheckBox = new JCheckBox("Tambah Antar Service(2000/4kg pertama, kemudian 500/kg");
+        gridManager.gridy = 3;
+        add(antarCheckBox, gridManager);
+
+        createNotaButton = new JButton("Buat Nota");
+        gridManager.gridy = 4;
+        gridManager.gridwidth = 3;
+        createNotaButton.addActionListener(this);
+        add(createNotaButton, gridManager);
+
+        backButton = new JButton("Kembali");
+        backButton.addActionListener(this);
+        gridManager.gridy = 5;
+        add(backButton, gridManager);
     }
 
     /**
@@ -72,7 +129,51 @@ public class CreateNotaGUI extends JPanel {
      * Akan dipanggil jika pengguna menekan "createNotaButton"
      * */
     private void createNota() {
-        // TODO
+        int berat = -1;
+        boolean perintahSetrika = setrikaCheckBox.isSelected();
+        String paket = (String) paketComboBox.getSelectedItem();
+        boolean perintahAntar = antarCheckBox.isSelected();
+
+        try {
+            berat = Integer.parseInt(beratTextField.getText());
+        } catch (NumberFormatException e){
+            JOptionPane.showMessageDialog(this, "Berat Cucian harus berisi angka", "Error", JOptionPane.ERROR_MESSAGE);
+            beratTextField.setText("");
+            setrikaCheckBox.setSelected(false);
+            antarCheckBox.setSelected(false);
+            return;
+        }
+        if (berat <= 0){
+            JOptionPane.showMessageDialog(this, "Masukan berat cucian dalam bilangan positif", "Error", JOptionPane.ERROR_MESSAGE);
+            beratTextField.setText("");
+            setrikaCheckBox.setSelected(false);
+            antarCheckBox.setSelected(false);
+            return;
+        }
+
+        if (berat < 2){
+            berat++;
+            JOptionPane.showMessageDialog(this, "Cucian kurang dari 2 kg, maka cucian akan dianggap sebagai 2 kg", "Info", JOptionPane.INFORMATION_MESSAGE);
+        }
+        Nota nota = new Nota(memberSystemGUI.getLoggedInMember(), berat, paket, fmt.format(cal.getTime()));
+
+
+        if (perintahSetrika){
+            SetrikaService setrikaService = new SetrikaService();
+            nota.addService(setrikaService);
+        }
+
+        if (perintahAntar){
+            AntarService antarService = new AntarService();
+            nota.addService(antarService);
+        }
+        memberSystemGUI.getLoggedInMember().addNota(nota);
+        NotaManager.addNota(nota);
+
+        JOptionPane.showMessageDialog(this, "Nota berhasil dibuat", "Success", JOptionPane.INFORMATION_MESSAGE);
+        beratTextField.setText("");
+        setrikaCheckBox.setSelected(false);
+        antarCheckBox.setSelected(false);
     }
 
     /**
@@ -80,6 +181,19 @@ public class CreateNotaGUI extends JPanel {
      * Akan dipanggil jika pengguna menekan "backButton"
      * */
     private void handleBack() {
-        // TODO
+        MainFrame.getInstance().navigateTo(MemberSystemGUI.KEY);
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == backButton){
+            handleBack();
+        } else if (e.getSource() == createNotaButton){
+            createNota();
+        } else if (e.getSource() == showPaketButton){
+            showPaket();
+        }
+    }
+
+
 }
