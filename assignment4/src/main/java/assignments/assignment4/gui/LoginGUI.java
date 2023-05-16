@@ -94,16 +94,14 @@ public class LoginGUI extends JPanel implements ActionListener {
         String inputId = idTextField.getText();
         String inputPassword = passwordField.getText();
         SystemCLI systemCLI = loginManager.getSystem(inputId);
+        idTextField.setText("");
+        passwordField.setText("");
         if(systemCLI == null){
             JOptionPane.showMessageDialog(mainPanel, "Invalid ID or password", "Login Failed", JOptionPane.ERROR_MESSAGE);
-            idTextField.setText("");
-            passwordField.setText("");
             return;
         }
         if (!MainFrame.getInstance().login(inputId, inputPassword)){
             JOptionPane.showMessageDialog(mainPanel, "Invalid ID or password", "Login Failed", JOptionPane.ERROR_MESSAGE);
-            idTextField.setText("");
-            passwordField.setText("");
         }
 
     }

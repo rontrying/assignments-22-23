@@ -57,14 +57,18 @@ public class EmployeeSystemGUI extends AbstractMemberGUI {
      * Akan dipanggil jika pengguna menekan button pertama pada createButtons
      * */
     private void displayNota() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        for (Nota nota : notaList){
-            JLabel label = new JLabel(nota.getNotaStatus());
-            panel.add(label);
-        }
+        if (notaList.length == 0){
+            JOptionPane.showMessageDialog(this, "Belum ada nota", "List Nota", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            for (Nota nota : notaList){
+                JLabel label = new JLabel(nota.getNotaStatus());
+                panel.add(label);
+            }
 
-        JOptionPane.showMessageDialog(this, panel, "Informasi", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, panel, "Informasi", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     /**
@@ -72,13 +76,17 @@ public class EmployeeSystemGUI extends AbstractMemberGUI {
      * Akan dipanggil jika pengguna menekan button kedua pada createButtons
      * */
     private void cuci() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        for (Nota nota : notaList){
-            JLabel label = new JLabel(nota.kerjakan());
-            panel.add(label);
+        JOptionPane.showMessageDialog(this, "Stand back! " + loggedInMember.getNama() +" beginning to nyuci!", "Nyuci time", JOptionPane.INFORMATION_MESSAGE);
+        if (notaList.length == 0){
+            JOptionPane.showMessageDialog(this, "nothing to cuci here", "Nyuci Results", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            for (Nota nota : notaList){
+                JLabel label = new JLabel(nota.kerjakan());
+                panel.add(label);
+            }
+            JOptionPane.showMessageDialog(this, panel, "Nyuci Results", JOptionPane.INFORMATION_MESSAGE);
         }
-
-        JOptionPane.showMessageDialog(this, panel, "Informasi", JOptionPane.INFORMATION_MESSAGE);
     }
 }

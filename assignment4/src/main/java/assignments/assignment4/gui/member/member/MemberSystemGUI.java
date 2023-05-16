@@ -34,7 +34,6 @@ public class MemberSystemGUI extends AbstractMemberGUI {
      * */
     @Override
     protected JButton[] createButtons() {
-        // TODO
         return new JButton[]{
                 new JButton("Saya ingin laundry"),
                 new JButton("Lihat detail nota saya")
@@ -68,7 +67,11 @@ public class MemberSystemGUI extends AbstractMemberGUI {
         JTextArea textArea = new JTextArea(20, 45);
         textArea.setLineWrap(true);
         textArea.setEditable(false);
-        textArea.setText(text);
+        if (text.equals("")){
+            textArea.setText("Belum pernah laundry di CuciCuci, hiks :'(");
+        } else {
+            textArea.setText(text);
+        }
 
         // Membungkus JTextArea dengan JScrollPane
         JScrollPane scrollPane = new JScrollPane(textArea);

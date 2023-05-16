@@ -103,15 +103,20 @@ public class RegisterGUI extends JPanel implements ActionListener {
         String password = passwordField.getText();
         if (validateNoHp(noHp).equals("-1")){
             JOptionPane.showMessageDialog(mainPanel, "Nomor handphone harus berisi angka!", "Invalid Phone Number", JOptionPane.ERROR_MESSAGE);
+            phoneTextField.setText("");
             return;
         }
 
         Member registeredMember = loginManager.register(nama, noHp, password);
         if(registeredMember == null){
             JOptionPane.showMessageDialog(mainPanel, "User dengan nama "+nama+" dan nomor hp "+noHp+" sudah ada!", "Registration Failed", JOptionPane.ERROR_MESSAGE);
+            nameTextField.setText("");phoneTextField.setText("");passwordField.setText("");
+            handleBack();
             return;
         }
-        JOptionPane.showMessageDialog(mainPanel, "Berhasil membuat user dengan ID "+registeredMember.getId(), "Registration Successful", JOptionPane.INFORMATION_MESSAGE);
+        JTextField textField = new JTextField("Berhasil membuat user dengan ID "+registeredMember.getId() +"!");
+        textField.setEditable(false); // Membuat teks tidak dapat diedit
+        JOptionPane.showMessageDialog(mainPanel, textField, "Registration Successful", JOptionPane.INFORMATION_MESSAGE);
         nameTextField.setText("");phoneTextField.setText("");passwordField.setText("");
         handleBack();
     }
@@ -125,6 +130,7 @@ public class RegisterGUI extends JPanel implements ActionListener {
         }
     }
 
+    // untuk mengvalidasi nomor hp return -1 jika string kosong atau bukan digit
     private static String validateNoHp(String nomorHp){
         if (nomorHp.equals("")){
             return "-1";

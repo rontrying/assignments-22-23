@@ -60,7 +60,7 @@ public class CreateNotaGUI extends JPanel implements ActionListener {
         gridManager.gridy = 0;
         add(paketLabel, gridManager);
 
-        String[] comboBoxItems = {"Fast", "Reguler", "Express"};
+        String[] comboBoxItems = {"Express", "Fast", "Reguler"};
         paketComboBox = new JComboBox<>(comboBoxItems);
         gridManager.anchor = GridBagConstraints.EAST;
         gridManager.insets = new Insets(0,10, 0, 10);
@@ -139,15 +139,11 @@ public class CreateNotaGUI extends JPanel implements ActionListener {
         } catch (NumberFormatException e){
             JOptionPane.showMessageDialog(this, "Berat Cucian harus berisi angka", "Error", JOptionPane.ERROR_MESSAGE);
             beratTextField.setText("");
-            setrikaCheckBox.setSelected(false);
-            antarCheckBox.setSelected(false);
             return;
         }
         if (berat <= 0){
             JOptionPane.showMessageDialog(this, "Masukan berat cucian dalam bilangan positif", "Error", JOptionPane.ERROR_MESSAGE);
             beratTextField.setText("");
-            setrikaCheckBox.setSelected(false);
-            antarCheckBox.setSelected(false);
             return;
         }
 
@@ -174,6 +170,7 @@ public class CreateNotaGUI extends JPanel implements ActionListener {
         beratTextField.setText("");
         setrikaCheckBox.setSelected(false);
         antarCheckBox.setSelected(false);
+        paketComboBox.setSelectedIndex(0);
     }
 
     /**
@@ -181,6 +178,10 @@ public class CreateNotaGUI extends JPanel implements ActionListener {
      * Akan dipanggil jika pengguna menekan "backButton"
      * */
     private void handleBack() {
+        beratTextField.setText("");
+        setrikaCheckBox.setSelected(false);
+        antarCheckBox.setSelected(false);
+        paketComboBox.setSelectedIndex(0);
         MainFrame.getInstance().navigateTo(MemberSystemGUI.KEY);
     }
 

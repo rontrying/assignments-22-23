@@ -100,10 +100,9 @@ public class HomeGUI extends JPanel implements ActionListener {
      * Akan dipanggil jika pengguna menekan "toNextDayButton"
      * */
     private void handleNextDay() {
-        cal.add(Calendar.DATE, 1);
         NotaManager.toNextDay();
-        JOptionPane.showMessageDialog(mainPanel, "Kamu tidur hari ini... zzz...", "Info", JOptionPane.INFORMATION_MESSAGE);
         dateLabel.setText("Hari ini: "+fmt.format(cal.getTime()));
+        JOptionPane.showMessageDialog(mainPanel, "Kamu tidur hari ini... zzz...", "Info", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
