@@ -106,7 +106,11 @@ public class RegisterGUI extends JPanel implements ActionListener {
             phoneTextField.setText("");
             return;
         }
-
+        if (nama.equals("") || noHp.equals("") || password.equals("")){
+            JOptionPane.showMessageDialog(mainPanel, "Ada Field yang kosong", "Field Kosong", JOptionPane.ERROR_MESSAGE);
+            nameTextField.setText("");phoneTextField.setText("");passwordField.setText("");
+            return;
+        }
         Member registeredMember = loginManager.register(nama, noHp, password);
         if(registeredMember == null){
             JOptionPane.showMessageDialog(mainPanel, "User dengan nama "+nama+" dan nomor hp "+noHp+" sudah ada!", "Registration Failed", JOptionPane.ERROR_MESSAGE);
